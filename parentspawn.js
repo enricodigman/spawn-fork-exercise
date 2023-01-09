@@ -32,3 +32,7 @@ child.stdout.on('data', (data) => {
 child.stderr.on('data', (error) => {
   console.log(error.toString())
 })
+
+child.on('error', (error) => {
+  console.log(error.toString())
+})

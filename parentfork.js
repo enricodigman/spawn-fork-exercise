@@ -28,3 +28,7 @@ child.on('message', (data) => {
     heapUsed: process.memoryUsage().heapUsed,
   })
 })
+
+child.on('error', (error) => {
+  console.log(error.toString())
+})
