@@ -20,11 +20,9 @@ try {
   child.on('message', (data) => {
     const decryptedFile = decrypt(privateKey, Buffer.from(data.toString(), 'base64'), process.env.SECRET)
     const validation = validate('SHA256', decryptedFile, publicKey, sig) ? decryptedFile.toString() : 'Invalid Message'
-    console.table([{
-      text: validation,
-      timeConsumed: process.uptime(),
-      memoryUsed: process.memoryUsage().external,
-    }])
+    console.log(`Text: ${validation}`)
+    console.log(`Time Consumed: ${process.uptime()}`)
+    console.log(`Memory Consumed: ${process.memoryUsage().external}`)
     process.exit(0)
   })
 
