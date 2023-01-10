@@ -23,8 +23,8 @@ child.stdout.on('data', (data) => {
   const decryptedFile = decrypt(privateKey, Buffer.from(data.toString(), 'base64'), process.env.SECRET)
   const validation = validate('SHA256', decryptedFile, publicKey, sig) ? decryptedFile : 'Invalid Message'
   console.table([{
-    timeConsumed: process.uptime(),
     text: validation,
+    timeConsumed: process.uptime(),
     memoryUsed: process.memoryUsage().heapUsed,
   }])
   process.exit(0)
