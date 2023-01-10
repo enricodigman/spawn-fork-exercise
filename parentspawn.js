@@ -23,7 +23,7 @@ try {
     console.table([{
       text: validation,
       timeConsumed: process.uptime(),
-      memoryUsed: process.memoryUsage().heapUsed,
+      memoryUsed: process.memoryUsage().external,
     }])
     process.exit(0)
   })
