@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv'
 import { readFileSync } from 'node:fs'
-import { encrypt } from './crypto.js'
+import { encrypt } from './helper.js'
 
 dotenv.config()
 

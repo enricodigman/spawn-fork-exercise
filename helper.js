@@ -1,7 +1,9 @@
-import crypto from 'crypto'
+import {
+  publicEncrypt, privateDecrypt, verify, generateKeyPairSync,
+} from 'node:crypto'
 
-export default function generateKeys(secret) {
-  const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+export function generateKeys(secret) {
+  const { publicKey, privateKey } = generateKeyPairSync('rsa', {
     modulusLength: 2048,
     publicKeyEncoding: {
       type: 'spki',
@@ -16,4 +18,23 @@ export default function generateKeys(secret) {
   })
 
   return { publicKey, privateKey }
+}
+
+export function encrypt(publicKey, content) {
+  const encrypted = publicEncrypt(publicKey, content)
+  return encrypted
+}
+
+export function decrypt(privateKey, content, secret) {
+  const decrypted = privateDecrypt({
+    key: privateKey,
+    passphrase: secret,
+  }, content)
+
+  return decrypted.toString()
+}
+
+export function validate(algo, data, publicKey, signature) {
+  const result = verify(algo, data, publicKey, signature)
+  return result
 }
