@@ -31,7 +31,7 @@ export function decrypt(privateKey, content, secret) {
     passphrase: secret,
   }, content)
 
-  return decrypted.toString()
+  return decrypted
 }
 
 export function validate(algo, data, publicKey, signature) {

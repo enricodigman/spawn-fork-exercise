@@ -12,16 +12,14 @@ try {
   const child = fork('./childfork.js')
 
   const sig = sign('SHA256', readFileSync('./sampleFile.txt'), { key: privateKey, passphrase: process.env.SECRET })
-  const dataObj = {
+  child.send(JSON.stringify({
     pubKey: publicKey,
     file: './sampleFile.txt',
-  }
-
-  child.send(JSON.stringify(dataObj))
+  }))
 
   child.on('message', (data) => {
     const decryptedFile = decrypt(privateKey, Buffer.from(data.toString(), 'base64'), process.env.SECRET)
-    const validation = validate('SHA256', decryptedFile, publicKey, sig) ? decryptedFile : 'Invalid Message'
+    const validation = validate('SHA256', decryptedFile, publicKey, sig) ? decryptedFile.toString() : 'Invalid Message'
     console.table([{
       text: validation,
       timeConsumed: process.uptime(),

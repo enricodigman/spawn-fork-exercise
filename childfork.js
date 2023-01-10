@@ -1,8 +1,5 @@
-import * as dotenv from 'dotenv'
 import { readFileSync } from 'node:fs'
 import { encrypt } from './helper.js'
-
-dotenv.config()
 
 process.on('message', (data) => {
   try {

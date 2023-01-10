@@ -12,16 +12,14 @@ try {
   const child = spawn('node', ['./childspawn.js'])
 
   const sig = sign('SHA256', readFileSync('./sampleFile.txt'), { key: privateKey, passphrase: process.env.SECRET })
-  const dataObj = {
+  child.stdin.write(JSON.stringify({
     pubKey: publicKey,
     file: './sampleFile.txt',
-  }
-
-  child.stdin.write(JSON.stringify(dataObj))
+  }))
 
   child.stdout.on('data', (data) => {
     const decryptedFile = decrypt(privateKey, Buffer.from(data.toString(), 'base64'), process.env.SECRET)
-    const validation = validate('SHA256', decryptedFile, publicKey, sig) ? decryptedFile : 'Invalid Message'
+    const validation = validate('SHA256', decryptedFile, publicKey, sig) ? decryptedFile.toString() : 'Invalid Message'
     console.table([{
       text: validation,
       timeConsumed: process.uptime(),
