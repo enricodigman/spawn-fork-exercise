@@ -1,12 +1,12 @@
-import crypto from 'node:crypto'
+import { publicEncrypt, privateDecrypt, verify } from 'node:crypto'
 
 export function encrypt(publicKey, content) {
-  const encrypted = crypto.publicEncrypt(publicKey, content)
+  const encrypted = publicEncrypt(publicKey, content)
   return encrypted
 }
 
 export function decrypt(privateKey, content, secret) {
-  const decrypted = crypto.privateDecrypt({
+  const decrypted = privateDecrypt({
     key: privateKey,
     passphrase: secret,
   }, content)
@@ -14,7 +14,7 @@ export function decrypt(privateKey, content, secret) {
   return decrypted.toString()
 }
 
-export function verify(algo, data, publicKey, signature) {
-  const result = crypto.verify(algo, data, publicKey, signature)
+export function validate(algo, data, publicKey, signature) {
+  const result = verify(algo, data, publicKey, signature)
   return result
 }
