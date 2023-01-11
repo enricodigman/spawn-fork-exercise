@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv'
+import { config } from 'dotenv'
 import { fork } from 'node:child_process'
 import { sign } from 'node:crypto'
 import { readFileSync } from 'node:fs'
@@ -6,7 +6,7 @@ import { freemem } from 'node:os'
 import { generateKeys, validate, decrypt } from './helper.js'
 
 const startMem = freemem()
-dotenv.config()
+config()
 
 try {
   const { publicKey, privateKey } = generateKeys(process.env.SECRET)
@@ -20,7 +20,8 @@ try {
   })
   child.on('message', (data) => {
     try {
-      const decryptedFile = decrypt(privateKey, Buffer.from(data), process.env.SECRET)
+      const file = readFileSync(data)
+      const decryptedFile = decrypt(privateKey, file, process.env.SECRET)
       const validation = validate('SHA256', decryptedFile, publicKey, signature) ? decryptedFile.toString() : 'Invalid Message'
       console.table([{
         message: validation,
@@ -39,7 +40,7 @@ try {
   })
   child.send({
     publicKey,
-    fileContent,
+    file: './sampleFile.txt',
   })
 } catch (err) {
   console.log(err.toString())
